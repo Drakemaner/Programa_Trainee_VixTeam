@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bem-Vindo </h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="h-100 p-5 text-white bg-dark rounded-3">
+            <h1 class="display-5 fw-bold">Programa Trainee VIXTEAM</h1>
+            <p class="col-md-12 fs-4">Site do Programa de Trainee da VIXTEAM</p>
+            <button id="botao" class="btn btn-primary btn-lg" type="button" onclick=botao()>Botão</button>
+            <button id="botao2" class=" btn-primary btn-lg" type="button" onclick=link() style="position: relative; top:4px">Privaty</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function botao(){
+        document.getElementById("botao").innerHTML = "Ola"
+        document.getElementById("botao").style.backgroundColor = "orange"
+        window.alert("Você Clicou no Botão do Jumbotron")
+    }
+    function link(){
+        window.location.href="/home/Privacy"
+    }
+</script>
