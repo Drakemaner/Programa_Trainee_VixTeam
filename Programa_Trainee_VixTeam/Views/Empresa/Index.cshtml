@@ -1,4 +1,4 @@
-﻿@model Programa_Trainee_VixTeam.Models.Empresa
+﻿@model Programa_Trainee_VixTeam.Models.EmpresaModel
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -8,20 +8,24 @@
 
 <h1 class="text-center">Cadastro</h1>
 
-@using (Html.BeginForm())
-{
-    <h4>Insira os dados para completar o cadastro</h4>
-
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-
-    @Html.EditorForModel()
-
-
-    <div class="form-group">
-        <div class="col-md-offset col-md-10">
-            <input type="submit" value="Cadastrar" class="btn btn-primary"/>
-        </div>
-    </div>
-}
+<form asp-controller="Empresa" asp-action="Create">
+  <div class="form-group">
+    <label for="Nome">Nome</label>
+    <input type="text" class="form-control" asp-for="Nome" id="Nome" placeholder="Nome">
+  </div>
+  <div class="form-group">
+    <label for="Codigo">Codigo</label>
+    <input type="number" class="form-control" asp-for="Codigo" id="Codigo" placeholder="Codigo">
+  </div>
+  <div class="form-group">
+    <label for="NomeFantasia">Nome Fantasia</label>
+    <input type="text" class="form-control" asp-for="NomeFantasia" id="NomeFantasia" placeholder="Nome Fantasia"/>
+  </div>
+  <div class="form-group">
+    <label for="cpnj">Nome Fantasia</label>
+    <input type="text" class="form-control" asp-for="cpnj" id="cpnj" placeholder="CPNJ"/>
+  </div>
+  <button type="submit" style="position:relative; top:8px;" class="btn btn-primary">Submit</button>
+</form>
 
 

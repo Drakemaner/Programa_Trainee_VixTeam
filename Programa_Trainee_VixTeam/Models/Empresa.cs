@@ -3,14 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Programa_Trainee_VixTeam.Models
 {
-    public class Empresa
+    public class EmpresaModel
     {
         [Required]
         public string Nome { get; set; }
         [Required]
+        [Key]
         public int Codigo { get; set; }
         [Required]
-        [Display(Name = "Nome Fanatasia")]
+        
         public string NomeFantasia { get; set; }    
         [Required]
         public string cpnj { get; set; }

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Programa_Trainee_VixTeam.Models;
 
+
+
 namespace Programa_Trainee_VixTeam.Controllers
 {
-    public class EmpresaController : Controller
+    public class EmpresaController : Controller 
     {
         public IActionResult Index()
         {
@@ -11,9 +13,13 @@ namespace Programa_Trainee_VixTeam.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(Empresa Empresa)
+        public ActionResult Create([Bind("Nome, Codigo, NomeFantasia, cpnj")] EmpresaModel empresa)
         {
-            return View();
+
+            return View("../Home/Index");
+            
+            
+            
         }
     }
 }
