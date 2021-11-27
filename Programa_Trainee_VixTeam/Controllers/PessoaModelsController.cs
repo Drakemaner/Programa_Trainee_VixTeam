@@ -82,9 +82,35 @@ namespace Programa_Trainee_VixTeam.Controllers
         {
             //if (ModelState.IsValid)
             //{
-            _context.Add(pessoaModel);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var emailsIguais = _context.PessoaModel.Where(x => x.Email.Equals(pessoaModel.Email) && x.Codigo != pessoaModel.Codigo);
+
+
+                if (pessoaModel.limitedeFilhos() == false)
+                {
+                    ModelState.AddModelError("Limite de Filhos", "É impossivel possuir uma quantidade de filhos menor que 0");
+                    
+                }
+
+                if(pessoaModel.limiteSalario() == false)
+                {
+                    ModelState.AddModelError("Limite de Salarios", "Um Salario deve ser maior que 1200 e menor que 13000");
+                }
+
+                if (pessoaModel.emailsIguais(pessoaModel, _context))
+                {
+                    ModelState.AddModelError("Emails Duplicados", "Não pode haver mais de uma conta para o mesmo email");
+                }
+
+                else
+                {
+                    _context.Add(pessoaModel);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(pessoaModel);
+
+
             //}
             //return View(pessoaModel);
         }
@@ -112,31 +138,59 @@ namespace Programa_Trainee_VixTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nome,Email,DatadeNascimento,QuantidadeFilhos,Salario, Situacao")] PessoaModel pessoaModel)
         {
+            var emailsIguais = _context.PessoaModel.Where(x => x.Email.Equals(pessoaModel.Email) && x.Codigo != pessoaModel.Codigo);
+
             if (id != pessoaModel.Codigo)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (pessoaModel.limiteSalario() == false)
             {
-                try
-                {
-                    _context.Update(pessoaModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PessoaModelExists(pessoaModel.Codigo))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("Limite de Salarios", "Um Salario deve ser maior que 1200 e menor que 13000");
             }
+
+            if (pessoaModel.InativoEdicao())
+            {
+                ModelState.AddModelError("Inativo impossibilitado de Edição", "Não é permitido editar contas inativas");
+            }
+
+            if (pessoaModel.limitedeFilhos() == false)
+            {
+                ModelState.AddModelError("Limite de Filhos", "É impossivel possuir uma quantidade de filhos menor que 0");
+
+            }
+
+            if (pessoaModel.emailsIguais(pessoaModel, _context) == true)
+            {
+                ModelState.AddModelError("E-mails Repetidos", "Duas Contas Diferentes não podem ter e-mail iguais");
+            }
+
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(pessoaModel);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!PessoaModelExists(pessoaModel.Codigo))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            
             return View(pessoaModel);
         }
 
@@ -164,8 +218,17 @@ namespace Programa_Trainee_VixTeam.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var pessoaModel = await _context.PessoaModel.FindAsync(id);
-            _context.PessoaModel.Remove(pessoaModel);
-            await _context.SaveChangesAsync();
+            if(pessoaModel.Situacao == "Ativo")
+            {
+                ModelState.AddModelError("Situação Ativo", "Contas Ativas não podem ser removidas");
+            }
+            else
+            {
+                _context.PessoaModel.Remove(pessoaModel);
+                await _context.SaveChangesAsync();
+            }
+            
+            
             return RedirectToAction(nameof(Index));
         }
 
